@@ -86,6 +86,12 @@
                     var output = JSON.stringify(namea);
                     var pareData = JSON.parse(output);
                     resulto.innerHTML = output;
+                    // for (var x in pareData){
+                    //         if (pareData.hasOwnProperty(x)){
+                    //             resulto.innerHTML = x.name;
+                    //         }
+                    //     }
+                   
                 }else{
                     console.log("no data");
                 }
@@ -121,6 +127,7 @@ return dbref.val();
                 //     alert("no data founded");
                 // }
                 }
+
         searchButton.addEventListener('click',selectData);
 
       </script>
