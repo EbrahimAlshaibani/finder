@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Yemeni Number Finder</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='css/style.css'>
+    <!-- <script src='js/main.js'></script> -->
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.2.2/firebase-app.js"> 
+    </script>
+
+
+    <div class="container">
+        <form action="">
+            <h2>Yemeni Number Finder</h2>
+            <input type="text" name="number" id="number">
+            <button type="button" class="search-btn" id="search">Search</button>
+        </form>
+    </div>
+    <p id="result"></p>
+ 
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.2/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.8.2/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+     // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyBnT2gAPXOzuoM6cXRyVcv-yYeol8LGY7Q",
+          authDomain: "call-contacts.firebaseapp.com",
+          databaseURL: "https://call-contacts-default-rtdb.firebaseio.com",
+          projectId: "call-contacts",
+          storageBucket: "call-contacts.appspot.com",
+          messagingSenderId: "689363892465",
+          appId: "1:689363892465:web:c989db3c2bf09725389150",
+          measurementId: "G-LKP3S1BQW8"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+            import {getDatabase, ref, get, set,onValue, equalTo, child, query, orderByChild, update, remove} 
+        from "https://www.gstatic.com/firebasejs/9.8.2/firebase-database.js";
+     
+        const db = getDatabase();
+        var number = document.getElementById("number");
+        var searchButton =document.getElementById("search");
+        var resulto =document.getElementById("result");
+        //var name =document.getElementById("");
+        //insert
+        function InsertData(){
+            set(ref(db, "test/"+number.value),{
+                Number : number.value
+            }).then(()=>{
+                alert("Done");
+            }).catch((error)=>{
+                alert("Not Done");
+            });
+        }
+        //select data
+        // function selectData(){
+        //     const dbref = ref(db);
+        //     get(child(dbref, "devices/"+ number.value)).then((snapshot)=>{
+        //         if(snapshot.exists()){
+        //             alert(snapshot.val().phoneId);
+        //         }else{
+        //             alert("no data founded");
+        //         }
+        //     }).catch((error)=>{
+        //         alert("error");
+        //     });
+        // }
+        function selectData(){
+            const dbref = ref(db,'contacts');
+            const data  = query(dbref,orderByChild('number'),
+          equalTo(number.value));
+          onValue(data,(snapshot)=>{
+              const namea  = snapshot.val();
+                if(snapshot.exists()){
+                    console.log(namea);
+                    var output = JSON.stringify(namea);
+                    var pareData = JSON.parse(output);
+                    resulto.innerHTML = output;
+                }else{
+                    console.log("no data");
+                }
+            });
+       /*    const getdata = async ()=>{
+
+            const dbref = await get(query(ref(db, "contacts/id"),
+             orderByChild("id"),equalTo(number.value)));
+             console.log(dbref.val());
+return dbref.val();
+           };
+*/
+         /*var sub_url=   dbref.child("/contacts");
+         sub_url.once(number,function(snapshot){
+
+            snapshot.forEach(function(child){
+                console.log(child.val());
+            })*/
+
+          
+            
+            // once(child(dbref, "contacts/")).then((snapshot)=>{
+
+               // console.log(snapshot.val());
+                // snapshot.forEach(function(children) {
+                //       get(child(dbref, children.key+"/"+number.value)).then((snapshot)=>{
+                //         console.log(snapshot.val().Number);
+                //       });
+                    // });
+                // if(snapshot.exists()){
+                //     alert(snapshot.val().name);
+                // }else{
+                //     alert("no data founded");
+                // }
+                }
+        searchButton.addEventListener('click',selectData);
+
+      </script>
+</body>
+</html>
